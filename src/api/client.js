@@ -1,27 +1,41 @@
 const API_BASE_URL = ('https://trackerbackend-o3r71w7rz-dawar-ali-bukharis-projects.vercel.app/api').replace(/\/$/, '')
 
 async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    },
-    ...options
-  })
+  const url = `${API_BASE_URL}${path}`
+  console.log('[api] →', options.method || 'GET', url, options.body ? JSON.parse(options.body) : '')
+
+  let response
+  try {
+    response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers || {})
+      },
+      ...options
+    })
+  } catch (networkError) {
+    console.error('[api] ✗ network error (fetch never completed) for', url, networkError)
+    throw networkError
+  }
+
+  console.log('[api] ←', response.status, url)
 
   if (!response.ok) {
     let message = `Request failed with status ${response.status}.`
     try {
       const body = await response.json()
+      console.error('[api] error body', body)
       if (body?.error) message = body.error
     } catch {
-      
+      console.error('[api] error response was not JSON')
     }
     throw new Error(message)
   }
 
   if (response.status === 204) return null
-  return response.json()
+  const data = await response.json()
+  console.log('[api] data', data)
+  return data
 }
 
 export function getShipment(trackingNumber) {
