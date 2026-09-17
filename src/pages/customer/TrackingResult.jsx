@@ -37,8 +37,7 @@ export default function TrackingResult({ navigate }) {
           <div className="tracking-id-row"><div><small>Tracking Number</small><strong>{shipment.trackingNumber}</strong></div><button className="copy-btn" aria-label="Copy tracking number" onClick={copyTrackingNumber}><Clipboard size={17} /></button></div>
           <RouteCard shipment={shipment} />
           <ShipmentDetails shipment={shipment} />
-          <div className="info-strip"><Info size={17} /><span>This shipment is part of a bulk shipment. <button onClick={() => navigate(routes.more)}>Learn more <ArrowRight size={13} /></button></span></div>
-          <div className="location-card"><div className="location-heading"><span className="country-dot germany" /><div><small>Current Location</small><strong>{shipment.currentLocation}</strong></div></div><span className="location-updated">Updated {latestEvent?.dateLabel || shipment.startDate}</span></div>
+
           <button className="outline-button full-button" onClick={() => navigate(`${routes.journey}?tracking=${encodeURIComponent(shipment.trackingNumber)}`)}>View full tracking journey <ArrowRight size={16} /></button>
         </div>}
         <aside className="result-aside"><div className="aside-card"><div className="aside-icon"><ShieldCheck /></div><h3>We handle the journey</h3><p>Stay updated from pickup to delivery with reliable, secure tracking.</p><button className="text-button" onClick={() => navigate(routes.more)}>How it works <ArrowRight size={14} /></button></div></aside>

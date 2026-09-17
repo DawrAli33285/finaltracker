@@ -58,14 +58,14 @@ export function createShipment(payload) {
 }
 
 export function updateShipment(trackingNumber, payload) {
-  return request(`/shipments/${encodeURIComponent(trackingNumber)}`, {
+  return request(`/shipments/${encodeURIComponent(trackingNumber.trim().toUpperCase())}`, {
     method: 'PATCH',
     body: JSON.stringify(payload)
   })
 }
 
 export function deleteShipment(trackingNumber) {
-  return request(`/shipments/${encodeURIComponent(trackingNumber)}`, {
+  return request(`/shipments/${encodeURIComponent(trackingNumber.trim().toUpperCase())}`, {
     method: 'DELETE'
   })
 }
@@ -77,24 +77,66 @@ export function resetShipments() {
 export function createInitialActivity(startDate, townCity) {
   return [{
     dayNumber: 1,
-    status: 'Order placed',
+    status: 'Order picked up from supplier',
     location: 'Austin, United States',
     flag: 'US',
-    activityText: 'Order packed by supplier.',
+    activityText: 'Order picked up from supplier.',
     dateLabel: `${startDate} · 10:15`
   }, {
     dayNumber: 2,
-    status: 'Departed origin',
+    status: 'Departed from Austin, USA',
     location: 'Austin, United States',
     flag: 'US',
-    activityText: 'Shipment departed Austin distribution centre.',
+    activityText: 'Departed Austin distribution centre.',
     dateLabel: `${startDate} · 18:40`
   }, {
     dayNumber: 3,
-    status: 'In transit',
+    status: 'Arrived at Frankfurt hub',
+    location: 'Frankfurt, Germany',
+    flag: 'DE',
+    activityText: 'Arrived at Frankfurt hub.',
+    dateLabel: `${startDate} · 22:15`
+  }, {
+    dayNumber: 4,
+    status: 'Departed Frankfurt hub',
+    location: 'Frankfurt, Germany',
+    flag: 'DE',
+    activityText: 'Departed Frankfurt hub.',
+    dateLabel: `${startDate} · 22:15`
+  }, {
+    dayNumber: 5,
+    status: 'Arrived at Dubai hub',
+    location: 'Dubai, United Arab Emirates',
+    flag: 'AE',
+    activityText: 'Arrived at Dubai hub.',
+    dateLabel: `${startDate} · 22:15`
+  }, {
+    dayNumber: 6,
+    status: 'Departed Dubai',
+    location: 'Dubai, United Arab Emirates',
+    flag: 'AE',
+    activityText: 'Departed Dubai hub.',
+    dateLabel: `${startDate} · 22:15`
+  }, {
+    dayNumber: 7,
+    status: 'Arrived in South Africa',
     location: `${townCity}, South Africa`,
     flag: 'ZA',
-    activityText: 'Shipment is moving through the international network.',
+    activityText: 'Arrived in South Africa.',
+    dateLabel: `${startDate} · 22:15`
+  }, {
+    dayNumber: 8,
+    status: 'Out for delivery',
+    location: `${townCity}, South Africa`,
+    flag: 'ZA',
+    activityText: 'Shipment is out for delivery.',
+    dateLabel: `${startDate} · 22:15`
+  }, {
+    dayNumber: 9,
+    status: 'Delivered',
+    location: `${townCity}, South Africa`,
+    flag: 'ZA',
+    activityText: 'Shipment delivered.',
     dateLabel: `${startDate} · 22:15`
   }]
 }
