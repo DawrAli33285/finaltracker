@@ -1,4 +1,4 @@
-const API_BASE_URL = ('https://trackerbackend-puce.vercel.app/api').replace(/\/$/, '')
+const API_BASE_URL = ('http://localhost:5000/api').replace(/\/$/, '')
 
 async function request(path, options = {}) {
   const url = `${API_BASE_URL}${path}`

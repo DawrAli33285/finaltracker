@@ -17,13 +17,17 @@ export default function TrackingJourney({ navigate }) {
     return () => { active = false }
   }, [trackingNumber])
 
-  const timeline = shipment?.activityLog?.map((event) => [
-    event.status,
-    event.dateLabel,
-    event.dayNumber < shipment.demoDay ? 'done' : event.dayNumber === shipment.demoDay ? 'active' : 'upcoming'
-  ]) || []
+  
+    let hash = 0
+    const timeline = shipment?.activityLog
+    ?.filter((event) => event.dayNumber <= shipment.demoDay)
+    .map((event) => [
+      event.status,
+      event.dateLabel,
+      event.dayNumber < shipment.demoDay ? 'done' : 'active'
+    ]) || []
 
-  const updates = [...(shipment?.activityLog || [])].reverse()
+  const updates = [...(shipment?.activityLog?.filter((event) => event.dayNumber <= shipment.demoDay) || [])].reverse()
 
   return (
     <section className="page-section">

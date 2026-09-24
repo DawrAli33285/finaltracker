@@ -48,7 +48,7 @@ export default function GenerateTracking({ navigate }) {
       event.preventDefault()
       addItem()
     } else if (event.key === 'Backspace' && !itemDraft && items.length > 0) {
-      // quick-remove the last tag when backspacing on an empty input
+ 
       setItems((current) => current.slice(0, -1))
     }
   }
