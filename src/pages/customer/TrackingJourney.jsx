@@ -18,17 +18,33 @@ export default function TrackingJourney({ navigate }) {
   }, [trackingNumber])
 
   
-    let hash = 0
-    const timeline = shipment?.activityLog
-    ?.filter((event) => event.dayNumber <= shipment.demoDay)
-    .map((event) => [
-      event.status,
-      event.dateLabel,
-      event.dayNumber < shipment.demoDay ? 'done' : 'active'
-    ]) || []
+  const log = shipment?.activityLog || []
 
-  const updates = [...(shipment?.activityLog?.filter((event) => event.dayNumber <= shipment.demoDay) || [])].reverse()
+  // Index of the current step: matches status + location, falls back to status only
+  let currentIndex = log.findIndex(
+    (event) =>
+      event.dayNumber === shipment?.demoDay &&
+      event.status === shipment?.currentStatus &&
+      event.location === shipment?.currentLocation
+  )
+  if (currentIndex === -1) {
+    currentIndex = log.findIndex(
+      (event) =>
+        event.dayNumber === shipment?.demoDay &&
+        event.status === shipment?.currentStatus
+    )
+  }
+  if (currentIndex === -1) currentIndex = log.length - 1
 
+  const visibleEvents = shipment ? log.slice(0, currentIndex + 1) : []
+
+  const timeline = visibleEvents.map((event, index) => [
+    event.status,
+    event.dateLabel,
+    index < currentIndex ? 'done' : 'active'
+  ])
+
+  const updates = [...visibleEvents].reverse()
   return (
     <section className="page-section">
       <CustomerPageHeader title="Tracking Journey" subtitle="A complete view of your shipment's progress" navigate={navigate} />
@@ -39,11 +55,7 @@ export default function TrackingJourney({ navigate }) {
           <div className="journey-head"><div><small>Tracking Number</small><strong>{shipment.trackingNumber}</strong></div><span className="journey-status"><span /> {shipment.currentStatus}</span></div>
           <div className="timeline">{timeline.map(([name, date, state]) => <div className={`timeline-row ${state}`} key={`${name}-${date}`}><span className="timeline-node">{state === 'done' && <Check size={11} />}</span><div><strong>{name}</strong><small>{date}</small></div></div>)}</div>
         </div>
-        <div className="updates-card">
-          <h2>Latest Updates</h2>
-          <div className="updates-list">{updates.map((event) => <div className="update-row" key={`${event.dayNumber}-${event.dateLabel}`}><span className="update-dot" /><div><small>{event.dateLabel}</small><p>{event.activityText}</p></div></div>)}</div>
-          <button className="outline-button full-button" onClick={() => navigate(`${routes.result}?tracking=${encodeURIComponent(shipment.trackingNumber)}`)}>Back to shipment details <ArrowRight size={16} /></button>
-        </div>
+     
       </div>}
     </section>
   )

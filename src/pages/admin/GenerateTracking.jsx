@@ -10,7 +10,8 @@ const initialForm = {
   recipientName: '',
   deliveryAddress: '',
   townCity: '',
-  startDate: ''
+  startDate: '',
+  endDate: ''
 }
 
 function makeTrackingNumber() {
@@ -143,12 +144,25 @@ export default function GenerateTracking({ navigate }) {
                   className="date-input-field"
                   value={form.startDate}
                   onChange={update}
-                />
+                  />
+                </div>
+              </div>
+              <div className="form-section">
+                <label htmlFor="endDate">End Date</label>
+                <div className="date-input-wrap">
+                  <CalendarDays size={16} className="date-input-icon" />
+                  <input
+                    id="endDate"
+                    type="date"
+                    name="endDate"
+                    className="date-input-field"
+                    value={form.endDate}
+                    min={form.startDate || undefined}
+                    onChange={update}
+                  />
+                </div>
               </div>
             </div>
-            <div />
-          </div>
-
           {error && <div className="form-error api-form-error">{error}</div>}
           <button className="primary-button create-submit" onClick={submit} disabled={saving || items.length === 0}>{saving ? 'Saving shipment…' : 'Save & Generate Tracking Page'} {!saving && <ArrowRight size={16} />}</button>
         </div>

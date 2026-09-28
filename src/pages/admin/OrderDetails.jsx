@@ -75,6 +75,7 @@ export default function OrderDetails({ navigate }) {
               <Detail label="Items Ordered" value={shipment.itemsOrdered.join(', ')} />
               <Detail label="Carrier" value={shipment.carrierLabel} />
               <Detail label="Start Date" value={shipment.startDate} />
+              <Detail label="End Date" value={shipment.endDate || '—'} />
             </div>
             <div className="form-section" style={{ marginTop: 14 }}>
               <label>Current Location</label>

@@ -7,7 +7,7 @@ export function RouteCard({ shipment }) {
   const [destination, country = 'South Africa'] = finalLocation.split(',').map((part) => part.trim())
  const destinationClass = 'za'
 
-  return <div className="route-card"><div className="route-point"><span className="flag us" /><small>From</small><strong>Austin</strong><span>United States</span></div><div className="route-connector"><ArrowRight size={18} /><span>to</span></div><div className="route-point"><span className={`flag ${destinationClass}`} /><small>To</small><strong>{shipment?.townCity || destination}</strong><span>{country}</span></div></div>
+  return <div className="route-card"><div className="route-point"><span className="flag us" /><small>From</small><strong>Austin, Texas</strong><span>United States</span></div><div className="route-connector"><ArrowRight size={18} /><span>to</span></div><div className="route-point"><span className={`flag ${destinationClass}`} /><small>To</small><strong>{shipment?.townCity || destination}</strong><span>{country}</span></div></div>
 }
 
 export function ShipmentDetails({ shipment }) {
