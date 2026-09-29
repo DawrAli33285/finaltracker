@@ -102,3 +102,57 @@ a { color: inherit; }
   .page-section { padding: 30px 0 50px; }.page-heading { margin-bottom: 22px; }.page-heading h1 { font-size: 30px; }.result-layout, .journey-layout, .form-page-grid, .order-detail-grid { display: block; }.result-main { padding: 16px; }.result-aside, .updates-card, .preview-panel, .history-panel { margin-top: 15px; }.status-banner { padding: 12px; }.status-date { display: none; }.route-card { padding: 15px 10px; }.route-point { min-width: 0; }.route-point strong { font-size: 12px; }.result-layout { width: min(100% - 32px, 560px); }.journey-layout { width: min(100% - 32px, 560px); }.more-grid { grid-template-columns: 1fr; }.more-intro { padding: 20px; }.more-intro h2 { font-size: 18px; }
   .admin-page { padding: 30px 0 55px; }.admin-page-title { align-items: start; gap: 18px; flex-direction: column; }.admin-page-title h1, .order-title h1 { font-size: 28px; }.stats-grid { grid-template-columns: 1fr; gap: 10px; }.admin-content-grid { display: block; }.chart-panel { margin-top: 15px; }.order-status { font-size: 9px; }.admin-header-right { gap: 6px; }.admin-user { display: none; }.auth-card { padding: 30px 23px 25px; }.two-col { grid-template-columns: 1fr; gap: 0; }.carrier-options button { flex: 1 1 44%; justify-content: center; }.order-title { align-items: start; flex-direction: column; gap: 15px; }.order-title .outline-button { width: 100%; }.order-detail-page .admin-back { margin-bottom: 18px; }
 }
+
+
+.admin-header .admin-mobile-nav {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  top: 74px;
+  left: 0;
+  right: 0;
+  padding: 10px 16px 13px;
+  border-bottom: 1px solid #dfe9f3;
+  background: #fff;
+  box-shadow: 0 10px 20px rgba(19, 55, 99, .1);
+  z-index: 10;
+}
+.admin-header .admin-mobile-nav button {
+  width: 100%;
+  border: 0;
+  border-radius: 5px;
+  padding: 12px 10px;
+  background: transparent;
+  color: #536987;
+  font-size: 12px;
+  text-align: left;
+}
+.admin-header .admin-mobile-nav button:hover {
+  background: #f0f7ff;
+  color: #075bc5;
+}
+.admin-header .admin-mobile-nav button:last-child {
+  color: #c04b5d;
+}
+
+@media (max-width: 800px) {
+  .admin-header .admin-mobile-nav { top: 64px; }
+}
+
+.create-submit:disabled {
+  opacity: 0.6;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.create-submit {
+  color: #fff;
+}
+
+  
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}

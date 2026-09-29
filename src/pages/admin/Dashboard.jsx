@@ -54,7 +54,7 @@ export default function Dashboard({ navigate }) {
 
   return (
     <section className="admin-page">
-      <AdminPageTitle title="Good morning, Admin" subtitle="Here's what's happening today." action={{ label: 'Generate Tracking Number', icon: <Zap size={16} />, onClick: () => navigate(routes.generate) }} />
+      <AdminPageTitle title="Welcome, Admin" subtitle="Here's what's happening today." action={{ label: 'Generate Tracking Number', icon: <Zap size={16} />, onClick: () => navigate(routes.generate) }} />
       {error && <div className="shell api-state admin-api-state"><strong>Unable to load dashboard data</strong><p>{error}</p></div>}
       <div className="shell stats-grid">
         <StatCard icon={<CalendarDays />} label="Orders Delivered Today" value={summary?.delivered ?? '—'} />
@@ -63,7 +63,7 @@ export default function Dashboard({ navigate }) {
       </div>
       <div className="shell admin-content-grid">
         <div className="admin-panel orders-panel">
-          <div className="panel-head"><h2>Recent Orders</h2><button className="text-button">View All <ArrowRight size={14} /></button></div>
+          <div className="panel-head"><h2>Recent Orders</h2><button className="text-button" onClick={() => navigate(routes.orders)}>View All <ArrowRight size={14} /></button></div>
           <div className="orders-list">
             {(summary?.recent || []).map((order) => {
               const status = order.currentStatus || 'Pending'
@@ -75,7 +75,7 @@ export default function Dashboard({ navigate }) {
           </div>
         </div>
         <div className="admin-panel chart-panel">
-          <div className="panel-head"><h2>Shipment overview</h2><button className="icon-button"><Settings2 size={16} /></button></div>
+          <div className="panel-head"><h2>Shipment overview</h2></div>
           <div className="fake-chart">
   <div className="chart-bars">
     {series.map((d) => (

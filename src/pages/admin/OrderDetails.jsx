@@ -75,7 +75,7 @@ export default function OrderDetails({ navigate }) {
               <Detail label="Items Ordered" value={shipment.itemsOrdered.join(', ')} />
               <Detail label="Carrier" value={shipment.carrierLabel} />
               <Detail label="Start Date" value={shipment.startDate} />
-              <Detail label="End Date" value={shipment.endDate || '—'} />
+<Detail label="Start Time" value={shipment.startTime} />
             </div>
             <div className="form-section" style={{ marginTop: 14 }}>
               <label>Current Location</label>
@@ -97,7 +97,7 @@ export default function OrderDetails({ navigate }) {
                     key={`${event.dayNumber}-${event.dateLabel}`}
                     onClick={() => setStep(event)}
                     disabled={updating}
-                    style={{ width: '100%', border: 0, background: 'transparent', textAlign: 'left', cursor: updating ? 'wait' : 'pointer' }}
+                    style={{ width: '100%', border: 0, background: 'transparent', color: 'inherit', font: 'inherit', textAlign: 'left', cursor: updating ? 'wait' : 'pointer' }}
                   >
                     <span className="timeline-node">{state === 'done' && <Check size={11} />}</span>
                     <div><strong>{event.status}</strong><small>{event.dateLabel}</small></div>

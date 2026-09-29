@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
 import { ArrowRight, LockKeyhole, Package, UserRound } from 'lucide-react'
 import { routes } from '../../constants/routes'
-
-const ADMIN_EMAIL = 'admin@internetdat.com'
-const ADMIN_PASSWORD = 'password'
+import { login, setToken } from '../../api/client'
 
 export default function AdminLogin({ navigate }) {
   const [show, setShow] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
-
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    setLoading(true)
+    try {
+      const { token } = await login({ email, password })
+      setToken(token)
       navigate(routes.dashboard)
-    } else {
-      setError('Incorrect email or password.')
+    } catch (requestError) {
+      setError(requestError.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -36,7 +39,7 @@ export default function AdminLogin({ navigate }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@internetdat.com"
+              required
             />
           </div>
           <label>Password</label>
@@ -46,16 +49,16 @@ export default function AdminLogin({ navigate }) {
               type={show ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
             <button type="button" onClick={() => setShow(!show)}>{show ? 'Hide' : 'Show'}</button>
           </div>
-          {error && <p className="auth-error">{error}</p>}
+          {error && <span className="form-error">{error}</span>}
           <label className="remember"><input type="checkbox" defaultChecked /> <span>Remember me</span></label>
-          <button className="primary-button auth-submit">
-            Login <ArrowRight size={16} />
+          <button className="primary-button auth-submit" disabled={loading}>
+            {loading ? 'Signing in…' : 'Login'} {!loading && <ArrowRight size={16} />}
           </button>
         </form>
-        
       </div>
       <div className="auth-foot">Secure <span>•</span> Reliable <span>•</span> Internal Use Only</div>
     </section>

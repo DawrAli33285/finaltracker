@@ -1,17 +1,27 @@
+import { routes } from '../constants/routes'
+
+const TOKEN_KEY = 'internetdat_admin_token'
+export const getToken = () => localStorage.getItem(TOKEN_KEY)
+export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token)
+export const clearToken = () => localStorage.removeItem(TOKEN_KEY)
+
+
+
 const API_BASE_URL = ('http://66.29.149.254:5000/api').replace(/\/$/, '')
 
 async function request(path, options = {}) {
   const url = `${API_BASE_URL}${path}`
   console.log('[api] →', options.method || 'GET', url, options.body ? JSON.parse(options.body) : '')
-
   let response
   try {
+    const token = getToken()
     response = await fetch(url, {
+      ...options,
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(options.headers || {})
-      },
-      ...options
+      }
     })
   } catch (networkError) {
     console.error('[api] ✗ network error (fetch never completed) for', url, networkError)
@@ -19,6 +29,12 @@ async function request(path, options = {}) {
   }
 
   console.log('[api] ←', response.status, url)
+
+  if (response.status === 401 && !path.startsWith('/auth/login')) {
+    clearToken()
+    window.location.assign(routes.login)
+    throw new Error('Session expired. Please sign in again.')
+  }
 
   if (!response.ok) {
     let message = `Request failed with status ${response.status}.`
@@ -73,15 +89,14 @@ export function deleteShipment(trackingNumber) {
 export function resetShipments() {
   return request('/shipments/reset', { method: 'POST' })
 }
-
-export function createInitialActivity(startDate, townCity) {
+export function createInitialActivity(startDate, townCity, startTime = '10:15') {
   return [{
     dayNumber: 1,
     status: 'Order picked up from supplier',
     location: 'Austin, United States',
     flag: 'US',
     activityText: 'Order picked up from supplier.',
-    dateLabel: `${startDate} · 10:15`
+    dateLabel: `${startDate} · ${startTime}`
   }, {
     dayNumber: 2,
     status: 'Departed from Austin, USA',
@@ -139,4 +154,38 @@ export function createInitialActivity(startDate, townCity) {
     activityText: 'Shipment delivered.',
     dateLabel: `${startDate} · 22:15`
   }]
+}
+
+
+export function login(payload) {
+  return request('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+}
+
+export function changePassword(payload) {
+  return request('/auth/change-password', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+}
+
+export function forgotPassword(email) {
+  return request('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  })
+}
+
+export function resetPassword(payload) {
+  return request('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+}
+
+
+export function logout() {
+  clearToken()
 }

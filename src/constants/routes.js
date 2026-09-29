@@ -6,5 +6,7 @@ export const routes = {
   login: '/admin/login',
   dashboard: '/admin/dashboard',
   generate: '/admin/generate',
-  order: '/admin/order'
+  order: '/admin/order',
+  orders: '/admin/orders',
+  resetPassword: '/admin/reset-password',
 }

@@ -20,7 +20,7 @@ export default function TrackingJourney({ navigate }) {
   
   const log = shipment?.activityLog || []
 
-  // Index of the current step: matches status + location, falls back to status only
+ 
   let currentIndex = log.findIndex(
     (event) =>
       event.dayNumber === shipment?.demoDay &&

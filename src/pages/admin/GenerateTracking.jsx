@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { ArrowRight, CalendarDays, ChevronDown, Plus, X } from 'lucide-react'
+import { ArrowRight, CalendarDays, ChevronDown, Clock, Plus, X } from 'lucide-react'
+
 import { routes } from '../../constants/routes'
 import { createInitialActivity, createShipment } from '../../api/client'
 import Logo from '../../components/Logo'
@@ -11,7 +12,7 @@ const initialForm = {
   deliveryAddress: '',
   townCity: '',
   startDate: '',
-  endDate: ''
+  startTime: '10:15',
 }
 
 function makeTrackingNumber() {
@@ -59,6 +60,7 @@ export default function GenerateTracking({ navigate }) {
     setError('')
     try {
       const trackingNumber = makeTrackingNumber()
+      const { startTime, ...shipmentFields } = form 
       const shipment = await createShipment({
         trackingNumber,
         ...form,
@@ -67,7 +69,7 @@ export default function GenerateTracking({ navigate }) {
         currentLocation: `${form.townCity}, South Africa`,
         currentFlag: 'ZA',
         demoDay: 1,
-        activityLog: createInitialActivity(form.startDate, form.townCity)
+        activityLog: createInitialActivity(form.startDate, form.townCity, form.startTime)
       })
       navigate(`${routes.order}?tracking=${encodeURIComponent(shipment.trackingNumber)}`)
     } catch (requestError) {
@@ -131,7 +133,6 @@ export default function GenerateTracking({ navigate }) {
               </div>
             </div>
           </div>
-
           <div className="two-col">
             <div className="form-section">
               <label htmlFor="startDate">Start Date</label>
@@ -144,25 +145,25 @@ export default function GenerateTracking({ navigate }) {
                   className="date-input-field"
                   value={form.startDate}
                   onChange={update}
-                  />
-                </div>
-              </div>
-              <div className="form-section">
-                <label htmlFor="endDate">End Date</label>
-                <div className="date-input-wrap">
-                  <CalendarDays size={16} className="date-input-icon" />
-                  <input
-                    id="endDate"
-                    type="date"
-                    name="endDate"
-                    className="date-input-field"
-                    value={form.endDate}
-                    min={form.startDate || undefined}
-                    onChange={update}
-                  />
-                </div>
+                />
               </div>
             </div>
+
+            <div className="form-section">
+              <label htmlFor="startTime">Start Time</label>
+              <div className="date-input-wrap">
+                <Clock size={16} className="date-input-icon" />
+                <input
+                  id="startTime"
+                  type="time"
+                  name="startTime"
+                  className="date-input-field"
+                  value={form.startTime}
+                  onChange={update}
+                />
+              </div>
+            </div>
+          </div>
           {error && <div className="form-error api-form-error">{error}</div>}
           <button className="primary-button create-submit" onClick={submit} disabled={saving || items.length === 0}>{saving ? 'Saving shipment…' : 'Save & Generate Tracking Page'} {!saving && <ArrowRight size={16} />}</button>
         </div>

@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { ArrowUpRight, Menu, ShieldCheck, UserRound } from 'lucide-react'
+import { ArrowUpRight, LogOut, Menu, ShieldCheck, UserRound } from 'lucide-react'
 import Logo from './Logo'
 import { routes } from '../constants/routes'
+import { logout } from '../api/client'
+
 
 export function CustomerShell({ children, active, navigate }) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -39,20 +41,37 @@ export function CustomerShell({ children, active, navigate }) {
   )
 }
 
-export function AdminShell({ children, navigate }) {
+export function AdminShell({ children, navigate, hideAuth }) {
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const handleLogout = () => {
+    setMenuOpen(false)
+    logout() 
+    navigate(routes.login)
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="site-header admin-header">
         <div className="shell header-inner">
           <Logo admin navigate={navigate} />
-          <div className="admin-header-right"><span className="admin-user"><UserRound size={16} /> Admin Portal</span><button className="icon-button" aria-label={menuOpen ? 'Close admin menu' : 'Open admin menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}><Menu size={20} /></button></div>
+          <div className="admin-header-right">
+            <span className="admin-user"><UserRound size={16} /> Admin Portal</span>
+            {!hideAuth && (
+              <button className="icon-button" aria-label="Sign out" title="Sign out" onClick={handleLogout}>
+                <LogOut size={18} />
+              </button>
+            )}
+            <button className="icon-button" aria-label={menuOpen ? 'Close admin menu' : 'Open admin menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
+              <Menu size={20} />
+            </button>
+          </div>
         </div>
         {menuOpen && <nav className="mobile-nav admin-mobile-nav" aria-label="Admin mobile navigation">
           <button onClick={() => { setMenuOpen(false); navigate(routes.dashboard) }}>Dashboard</button>
-          <button onClick={() => { setMenuOpen(false); navigate(routes.generate) }}>Generate Tracking Number</button>
-          <button onClick={() => { setMenuOpen(false); navigate(routes.login) }}>Sign out</button>
+          <button onClick={() => { setMenuOpen(false); navigate(routes.orders) }}>All Orders</button>
+          <button onClick={() => { setMenuOpen(false); navigate(routes.resetPassword) }}>Reset password</button>
+          {!hideAuth && <button onClick={handleLogout}>Sign out</button>}
         </nav>}
       </header>
       <main>{children}</main>

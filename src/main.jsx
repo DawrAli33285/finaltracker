@@ -8,7 +8,13 @@ import TrackingJourney from './pages/customer/TrackingJourney'
 import MoreInfo from './pages/customer/MoreInfo'
 import AdminLogin from './pages/admin/AdminLogin'
 import Dashboard from './pages/admin/Dashboard'
+
+import ResetPassword from './pages/admin/ResetPassword'
 import GenerateTracking from './pages/admin/GenerateTracking'
+import AllOrders from './pages/admin/AllOrders'
+import RequireAuth from './components/RequireAuth'
+
+
 import OrderDetails from './pages/admin/OrderDetails'
 import './styles.css'
 
@@ -39,11 +45,19 @@ function App() {
   if (path === routes.result) return <CustomerShell active="track" navigate={navigate}><TrackingResult navigate={navigate} /></CustomerShell>
   if (path === routes.journey) return <CustomerShell active="track" navigate={navigate}><TrackingJourney navigate={navigate} /></CustomerShell>
   if (path === routes.more) return <CustomerShell active="more" navigate={navigate}><MoreInfo navigate={navigate} /></CustomerShell>
-  if (path === routes.login) return <AdminShell navigate={navigate}><AdminLogin navigate={navigate} /></AdminShell>
-  if (path === routes.dashboard) return <AdminShell navigate={navigate}><Dashboard navigate={navigate} /></AdminShell>
-  if (path === routes.generate) return <AdminShell navigate={navigate}><GenerateTracking navigate={navigate} /></AdminShell>
-  if (path === routes.order) return <AdminShell navigate={navigate}><OrderDetails navigate={navigate} /></AdminShell>
+  if (path === routes.login) return <AdminShell navigate={navigate} hideAuth><AdminLogin navigate={navigate} /></AdminShell>
+  if (path === routes.resetPassword) return <AdminShell navigate={navigate} hideAuth><ResetPassword navigate={navigate} /></AdminShell>
+
+  if (path === routes.dashboard) return <RequireAuth navigate={navigate}><AdminShell navigate={navigate}><Dashboard navigate={navigate} /></AdminShell></RequireAuth>
+  if (path === routes.order) return <RequireAuth navigate={navigate}><AdminShell navigate={navigate}><OrderDetails navigate={navigate} /></AdminShell></RequireAuth>
+  if (path === routes.orders) return <RequireAuth navigate={navigate}><AdminShell navigate={navigate}><AllOrders navigate={navigate} /></AdminShell></RequireAuth>
+  if (path === routes.generate) return <RequireAuth navigate={navigate}><AdminShell navigate={navigate}><GenerateTracking navigate={navigate} /></AdminShell></RequireAuth>
+  
+
+  
   return <CustomerShell active="home" navigate={navigate}><Landing navigate={navigate} /></CustomerShell>
+  
+
 }
 
 createRoot(document.getElementById('root')).render(<App />)
